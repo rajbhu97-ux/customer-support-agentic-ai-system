@@ -1,2 +1,48 @@
+# Python
 venv/
+.venv/
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data — generated files (regenerate with mock_data_generator/main.py)
+data/raw/
+data/scenarios/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# LangSmith / LangChain cache
+.langchain.db
+langchain_cache/
