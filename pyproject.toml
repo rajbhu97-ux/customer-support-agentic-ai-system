@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Customer Support Agentic AI System"
 requires-python = ">=3.12"
 dependencies = [
+    "langchain>=1.4.6",
+    "langchain-google-genai>=4.4.2",
+    "langgraph>=1.2.15",
     "pydantic-settings>=2.15.0",
     "streamlit>=1.65.0",
 ]
