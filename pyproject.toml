@@ -8,5 +8,14 @@ dependencies = [
     "langchain-google-genai>=4.4.2",
     "langgraph>=1.2.15",
     "pydantic-settings>=2.15.0",
+    "regex>=2026.9.29",
     "streamlit>=1.65.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
 ]
