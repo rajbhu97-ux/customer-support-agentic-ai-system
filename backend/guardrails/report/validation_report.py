@@ -1,28 +1,54 @@
 from dataclasses import dataclass, field
+from backend.models.enums import ValidationSeverity
+
+
+@dataclass
+class ValidationIssue:
+    code: str
+    message: str
+    stage: str
+    severity: ValidationSeverity
+
 
 @dataclass
 class ValidationReport:
 
-    issues: list[dict] = field(default_factory=list)
-
-    @property
-    def is_valid(self) -> bool:
-        return not any(issue["severity"] in ("critical", "recoverable") for issue in self.issues)
+    issues: list[ValidationIssue] = field(default_factory=list)
     
     @property
-    def has_critical_severity(self) -> bool:
-        return any(issue["severity"] == "critical" for issue in self.issues)
+    def has_critical_issue(self) -> bool:
+        return any(issue.severity == ValidationSeverity.CRITICAL for issue in self.issues)
+
+    @property
+    def has_recoverable_issue(self) -> bool:
+        return any(issue.severity ==  ValidationSeverity.RECOVERABLE for issue in self.issues)
+
 
     def add(
         self,
         code: str,
         message: str,
         stage: str,
-        severity: str = "critical"
+        severity: ValidationSeverity = ValidationSeverity.CRITICAL
     ):
-        self.issues.append({
-            "code": code,
-            "message": message,
-            "stage": stage,
-            "severity": severity
-        })
+        self.issues.append(
+            ValidationIssue(
+                code=code,
+                messagae=message,
+                stage=stage,
+                severity=severity
+            )
+        )
+
+    def to_dict(self):
+        return {
+            "issues": [
+                {
+                    "code": issue.code,
+                    "message": issue.message,
+                    "stage": issue.stage,
+                    "severity": issue.severity.value
+                }
+                for issue in self.issues
+            ]
+        }
