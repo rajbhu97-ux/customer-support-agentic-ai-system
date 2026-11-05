@@ -12,3 +12,7 @@ class ValidationSeverity(str, Enum):
     RECOVERABLE = "recoverable"
     CRITICAL = "critical"
 
+class CircuitState(str, Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"

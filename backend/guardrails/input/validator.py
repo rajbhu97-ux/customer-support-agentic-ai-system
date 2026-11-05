@@ -1,11 +1,14 @@
 
-from backend.models.agent_state import ValidationResult
-import re
-from backend.guardrails.report.validation_report import ValidationReport
-from backend.guardrails.input.input_sanitizer import normalize_input, mask_sensitive_input
+from backend.guardrails.report import ValidationReport
+from backend.guardrails.input.sanitizer import normalize_input, mask_sensitive_input
+from backend.guardrails.input.patterns import COMPILED_INJECTION_PATTERNS
+from backend.models.agent_state import State
 
 
-def validate_input(message: str, report: ValidationReport) -> None:
+def validate_input(state: State, report: ValidationReport) -> None:
+
+    message = state.get("raw_user_message")
+
     if not isinstance(message, str):
         report.add(
             "INVALID_INPUT_FORMAT",
@@ -42,17 +45,6 @@ def validate_input(message: str, report: ValidationReport) -> None:
         )
         return None
 
-    normalized_message = normalize_input(message)
-
-    if not normalized_message:
-        report.add(
-            "INVALID_NORMALIZED_INPUT",
-            "Input failed normalization",
-            "invalid_input",
-            severity="recoverable"
-        )
-        return None
-
     for pattern in COMPILED_INJECTION_PATTERNS:
         if pattern.search(message):
             report.add(
@@ -63,7 +55,7 @@ def validate_input(message: str, report: ValidationReport) -> None:
             )
             return None
     
-    sanitized_message, detected_pii = mask_sensitive_input(normalized_message)
+    _, detected_pii = mask_sensitive_input(normalized_message)
 
     if detected_pii:
         report.add(
@@ -72,5 +64,4 @@ def validate_input(message: str, report: ValidationReport) -> None:
             "data_masking",
             severity="warning"
         )
-
-    return sanitized_message
+        return None

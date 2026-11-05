@@ -1,9 +1,6 @@
 import unicodedata
 
-from backend.guardrails.input.input_patterns import (
-    COMPILED_INJECTION_PATTERNS,
-    COMPILED_PII_PATTERNS,
-)
+from backend.guardrails.input.patterns import COMPILED_PII_PATTERNS
 
 
 def normalize_input(message: str) -> str:
@@ -22,9 +19,9 @@ def mask_sensitive_input(message: str):
 
     detected_pii = []
 
-    for pii_type, (pattern, replacement) in COMPILED_PII_PATTERNS.items():
+    for pattern, replacement in COMPILED_PII_PATTERNS:
         if pattern.search(message):
-            detected_pii.append(pii_type)
+            detected_pii.append(replacement)
             message = pattern.sub(replacement, message)
     
     return message, detected_pii

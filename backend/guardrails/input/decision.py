@@ -1,6 +1,6 @@
 
-from backend.models.enums import InputDecision, ValidationSeverity
-from backend.guardrails.report.validation_report import ValidationReport
+from backend.models.enums import InputDecision
+from backend.guardrails.report import ValidationReport
 
 
 def get_input_decision(report: ValidationReport) -> InputDecision:

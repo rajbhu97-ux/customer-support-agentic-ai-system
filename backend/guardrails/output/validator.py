@@ -1,10 +1,10 @@
 import math
-import re
 
 from backend.models.agent_state import State
-from backend.guardrails.report.validation_report import ValidationReport
-from backend.guardrails.runtime_validator import ActionTakenModel
-from backend.guardrails.utils.utils import SUPPORTED_INTENT, SUPPORTED_URGENCY, SUPPORTED_SENTIMENT, SUPPORTED_STATUS, REQUIRED_FIELD_BY_INTENT, SENSITIVE_PATTERNS
+from backend.guardrails.report import ValidationReport
+from backend.guardrails.schemas import ActionTakenModel
+from backend.guardrails.constants import SUPPORTED_INTENT, SUPPORTED_URGENCY, SUPPORTED_SENTIMENT, SUPPORTED_STATUS, REQUIRED_FIELD_BY_INTENT
+from backend.guardrails.output.patterns import SENSITIVE_PATTERNS
 
 
 def validate_classification(state: State, report: ValidationReport) -> None:
@@ -60,8 +60,24 @@ def validate_classification(state: State, report: ValidationReport) -> None:
     
 
 def validate_required_fields(state: State, report: ValidationReport) -> None:
-    intent = state.intent
-    entities = state.entities
+    intent = state.get("intent")
+    entities = state.get("entities")
+
+    if not isinstance(entities, dict):
+        report.add(
+            "INVALID_ENTITIES_FORMAT",
+            "Entities must be a dictionary",
+            "required_fields"
+        )
+        return
+    
+    if intent not in REQUIRED_FIELD_BY_INTENT:
+        report.add(
+            "UNEXPECTED_INTENT",
+            f"Intent {intent} is not supported for required fields validation",
+            "required_fields"
+        )
+        return
 
     required_fields = REQUIRED_FIELD_BY_INTENT.get(intent, [])
 
@@ -84,8 +100,15 @@ def validate_required_fields(state: State, report: ValidationReport) -> None:
 
 
 def validate_action_consistency(state: State, report: ValidationReport) -> None:
-    actions = state.actions_taken
-    data = state.data_for_response
+    actions = state.get("actions_taken")
+    data = state.get("data_for_response")
+    if not data:
+        report.add(
+            "MISSING_DATA_FOR_RESPONSE",
+            "Data for response is required",
+            "input_consistency"
+        )
+        return 
 
     if actions:
         if not isinstance(actions, list):
@@ -112,7 +135,17 @@ def validate_action_consistency(state: State, report: ValidationReport) -> None:
                  )
 
 
-def validate_sensitive_output(message: str, report: ValidationReport) -> None:
+def validate_sensitive_output(state: State, report: ValidationReport) -> None:
+
+    message = state.get("final_response")
+
+    if not message or not isinstance(message, str):
+        report.add(
+            "MISSING_FINAL_RESPONSE",
+            "Final response is required",
+            "output_validation"
+        )
+        return
 
     for key, pattern in SENSITIVE_PATTERNS.items():
         if pattern.search(message):
@@ -147,13 +180,12 @@ def validate_final_response(message: str, report: ValidationReport) -> None:
                 "final_response"
             )
             break
-    validate_sensitive_output(message, report)
 
 
 def validate_state_consistancy(state: State, report: ValidationReport) -> None:
-    status = state.status
-    escalation_reason = state.escalation_reason
-    hitl_decision = state.hitl_decision
+    status = state.get("status")
+    escalation_reason = state.get("escalation_reason")
+    hitl_decision = state.get("hitl_decision")
     
     if status == "escalated" and not escalation_reason:
         report.add(
