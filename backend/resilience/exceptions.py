@@ -41,4 +41,10 @@ class CircuitBreakerOpenError(Exception):
             f"{name} Circuit is OPEN. Please retry after {retry_after} time"
         )
 
+class BulkHeadFullError(Exception):
+    """Raise when bulkhead capacity is exhasted"""
+
+class BulkHeadQueueTimeOutError(Exception):
+    """Raised when request cannot acquire a bulkhead slot in time"""
+
     

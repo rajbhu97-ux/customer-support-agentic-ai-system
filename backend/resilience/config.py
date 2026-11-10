@@ -20,4 +20,8 @@ class TimeOutConfig:
     timeout: float = 10.0
 
 
-
+@dataclass(frozen=True)
+class BulkHeadConfig:
+    max_concurrent: int = 10
+    max_wait: int = 20
+    queue_timeout: float = 3.0
