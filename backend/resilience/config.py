@@ -14,5 +14,10 @@ class CircuitBreakerConfig:
     minimum_calls: int = 5
     
 
+@dataclass(frozen=True)
+class TimeOutConfig:
+
+    timeout: float = 10.0
+
 
 
