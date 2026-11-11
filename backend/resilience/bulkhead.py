@@ -8,7 +8,7 @@ from backend.resilience.exceptions import BulkHeadFullError, BulkHeadQueueTimeOu
 T = TypeVar("T")
 
 
-class BulkHeadManager:
+class BulkHeadExecutor:
 
     def __init__(self, config: BulkHeadConfig):
 

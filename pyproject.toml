@@ -8,6 +8,8 @@ dependencies = [
     "langchain-google-genai>=4.4.2",
     "langgraph>=1.2.15",
     "pydantic-settings>=2.15.0",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1.post1",
     "regex>=2026.9.29",
     "streamlit>=1.65.0",
 ]
