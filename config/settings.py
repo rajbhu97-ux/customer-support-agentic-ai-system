@@ -50,6 +50,10 @@ class Settings(BaseSettings):
     GOOGLE_API_KEY: Optional[str] = None
     TAVILY_API_KEY: Optional[str] = None
 
+    #AWS 
+    REGION: str = "us-east-1"
+    ENDPOINT_URL: Optional[str] = None
+
 
     @model_validator(mode='after')
     def check_api_key(self):
