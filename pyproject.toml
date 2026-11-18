@@ -6,10 +6,12 @@ requires-python = ">=3.12"
 dependencies = [
     "boto3>=1.44.4",
     "boto3-stubs[dynamodb,lambda,s3,secretmanager,sns,sqs,stepfunctions]>=1.44.4",
+    "fastapi[standard]>=0.163.1",
     "langchain>=1.4.6",
     "langchain-google-genai>=4.4.2",
     "langgraph>=1.2.15",
     "pydantic-settings>=2.15.0",
+    "pyjwt>=2.15.1",
     "pytest>=9.2.0",
     "pytest-asyncio>=1.4.1.post1",
     "regex>=2026.9.29",

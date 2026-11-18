@@ -54,6 +54,8 @@ class Settings(BaseSettings):
     REGION: str = "us-east-1"
     ENDPOINT_URL: Optional[str] = None
 
+    COGNITO_USER_POOL_ID: Optional[str] = None
+    COGNITO_CLIENT_ID: Optional[str] = None 
 
     @model_validator(mode='after')
     def check_api_key(self):
