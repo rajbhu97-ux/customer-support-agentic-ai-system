@@ -51,11 +51,14 @@ class Settings(BaseSettings):
     TAVILY_API_KEY: Optional[str] = None
 
     #AWS 
-    REGION: str = "us-east-1"
+    AWS_REGION: str = "us-east-1"
     ENDPOINT_URL: Optional[str] = None
 
     COGNITO_USER_POOL_ID: Optional[str] = None
     COGNITO_CLIENT_ID: Optional[str] = None 
+
+    BEDROCK_MODEL_ID: Optional[str] = None
+    AWS_PROFILE_NAME: Optional[str] = None
 
     @model_validator(mode='after')
     def check_api_key(self):

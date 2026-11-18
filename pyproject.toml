@@ -8,6 +8,7 @@ dependencies = [
     "boto3-stubs[dynamodb,lambda,s3,secretmanager,sns,sqs,stepfunctions]>=1.44.4",
     "fastapi[standard]>=0.163.1",
     "langchain>=1.4.6",
+    "langchain-aws>=1.9.3",
     "langchain-google-genai>=4.4.2",
     "langgraph>=1.2.15",
     "pydantic-settings>=2.15.0",
