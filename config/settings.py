@@ -60,6 +60,9 @@ class Settings(BaseSettings):
     BEDROCK_MODEL_ID: Optional[str] = None
     AWS_PROFILE_NAME: Optional[str] = None
 
+    DYNAMO_TABLE_NAME: Optional[str] = None
+    SNS_TOPIC_NAME: Optional[str] = None
+
     @model_validator(mode='after')
     def check_api_key(self):
         if not self.GOOGLE_API_KEY and not self.MOCK_LLM:
