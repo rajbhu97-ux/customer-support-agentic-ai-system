@@ -36,6 +36,12 @@ class DataForResponse(TypedDict):
     customer_tier: Optional[str]
 
 
+class ErrorInfo(TypedDict):
+    node: str
+    error_type: str
+    message: str
+
+
 class State(TypedDict):
     user_message: str
     raw_user_message: str
@@ -58,6 +64,13 @@ class State(TypedDict):
 
     # Response generator agent
     final_response: Optional[str]
+
+    # Control Flow
+    input_decision: Optional[str]
+    node_status: Optional[str]
+    error_info: Optional[ErrorInfo]
+    retry_count: Optional[int]
+    current_node: Optional[str]
 
     step_count: Optional[int]
     validation_result: Optional[ValidationResult]
