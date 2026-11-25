@@ -5,6 +5,7 @@ from backend.tools.shipment_tools import track_shipment, get_shipment_by_order
 from backend.tools.ticket_tools import create_ticket, escalate_ticket
 from backend.tools.notification_tools import send_notification
 from backend.tools.knowledge_base_tools import search_knowledge_base
+from backend.tools.payment_tool import get_payment
 
 from backend.tools.registry.registry import tool_registry
 from backend.models.tools import ToolPermission
@@ -172,3 +173,17 @@ def register_all_tools():
         ),
         category="knowledge",
     )
+    tool_registry.register(
+        "get_payment",
+        get_payment,
+        "Look up order by ID",
+        ToolPermission(
+            allowed_agents=[
+                "order_agent",
+                "refund_agent"
+            ],
+            rate_limit=120,
+        ),
+        category="payment",
+    )
+    return tool_registry
